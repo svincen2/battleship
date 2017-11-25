@@ -7,9 +7,9 @@
   (:gen-class))
 
 ; TODO
-; - Game:
-;   - check sink
-;   - check win
+; - Show the ship sizes in the ship board legend
+; - Show enemies sunken/remaining ships (list w/ counts, not actual positions)
+; - Clear screen after player turn?
 
 (defn- new-player
   [plr-name]
