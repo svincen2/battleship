@@ -96,8 +96,7 @@
   [player enemy]
   (println (str \newline (:name @player) "'s turn"))
   (let [get-coord (if (user? player) input-coord #(rand-coord player))]
-    (when true
-      (user? player)
+    (when (user? player)
       (println \newline "ships")
       (println (player-board->string (get-in @player [:boards :player]))))
     (println \newline "enemy")
