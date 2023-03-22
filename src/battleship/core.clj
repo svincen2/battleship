@@ -12,6 +12,8 @@
 ; - Clear screen after player turn?
 ; - Option to skip preamble
 ; - Handle bad coord like '3c'
+; - How to show sunken ships better?
+; - Show how many ships are left
 
 (defn ^:private new-player
   [plr-name]

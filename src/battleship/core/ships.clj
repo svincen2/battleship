@@ -1,6 +1,6 @@
 (ns battleship.core.ships
   (:require [clojure.set :refer [intersection]]
-            [battleship.core.boards :refer :all]))
+            [battleship.core.boards :as boards]))
 
 (def ship-types
   #{:carrier :battleship :cruiser :destroyer :submarine})
@@ -36,7 +36,7 @@
 
 (defn overlap?
   [ship-a ship-b]
-  (not (empty? (intersection (set ship-a) (set ship-b)))))
+  (seq (intersection (set ship-a) (set ship-b))))
 
 (defn increments-of?
   [n coll]
@@ -100,14 +100,23 @@
 
 (defn possible-placements
   [board-size ship-len]
-  (let [row-placements (row-partitions ship-len (to-positions (empty-board board-size)))
-        col-placements (col-partitions ship-len (to-positions (empty-board board-size)))]
-    (distinct (concat row-placements col-placements))))
+  (distinct
+    (concat
+      ;; row placements
+      (->> board-size
+           boards/empty-board
+           boards/to-positions
+           (row-partitions ship-len))
+      ;; col placements
+      (->> board-size
+           boards/empty-board
+           boards/to-positions
+           (col-partitions ship-len)))))
 ; ---
 
 (defn rand-ships
   ([]
-   (rand-ships *board-size*))
+   (rand-ships boards/*board-size*))
   ([board-size]
    (reduce
      (fn [placed ship-type]
@@ -121,10 +130,10 @@
 
 (defn ship-board
   ([ships]
-   (ship-board ships *board-size*))
+   (ship-board ships boards/*board-size*))
   ([ships board-size]
    (reduce (fn [new-board {:keys [type coords]}]
              (mark-ship new-board type coords))
-           (empty-board board-size)
+           (boards/empty-board board-size)
            ships)))
 
